@@ -1,0 +1,17 @@
+[
+  {
+    "Id": "43fdc58b-fce2-4af5-ac1b-2997a276278a",
+    "Name": "Marko",
+    "Email": "marko@test.com"
+  },
+  {
+    "Id": "f35751b5-d771-43e9-952b-1fc5c7cbd9bf",
+    "Name": "Marko",
+    "Email": "marko@test.com"
+  },
+  {
+    "Id": "156ff459-a111-4c14-8fdc-881f07e24014",
+    "Name": "Ana",
+    "Email": "ana@test.com"
+  }
+]
