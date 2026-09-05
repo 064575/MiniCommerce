@@ -1,0 +1,16 @@
+[
+  {
+    "Id": "62d94414-6081-4e22-80ad-e3aa849af5b2",
+    "Name": "Mechanical Keyboard Pro",
+    "Description": "Updated mechanical keyboard",
+    "Price": 109.99,
+    "IsActive": true
+  },
+  {
+    "Id": "73b76d34-ed2f-4aa9-8991-5495e6827d14",
+    "Name": "Gaming Mouse",
+    "Description": "Wireless gaming mouse",
+    "Price": 49.99,
+    "IsActive": true
+  }
+]
