@@ -3,5 +3,10 @@
     "ProductId": "62d94414-6081-4e22-80ad-e3aa849af5b2",
     "AvailableQuantity": 9,
     "ReservedQuantity": 0
+  },
+  {
+    "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
+    "AvailableQuantity": 8,
+    "ReservedQuantity": 0
   }
 ]

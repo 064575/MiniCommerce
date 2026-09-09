@@ -13,5 +13,10 @@
     "Id": "156ff459-a111-4c14-8fdc-881f07e24014",
     "Name": "Ana",
     "Email": "ana@test.com"
+  },
+  {
+    "Id": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
+    "Name": "Test User",
+    "Email": "test@minicommerce.com"
   }
 ]

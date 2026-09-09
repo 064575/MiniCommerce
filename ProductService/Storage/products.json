@@ -12,5 +12,12 @@
     "Description": "Wireless gaming mouse",
     "Price": 49.99,
     "IsActive": true
+  },
+  {
+    "Id": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
+    "Name": "Test Product",
+    "Description": "End-to-end test product",
+    "Price": 100,
+    "IsActive": true
   }
 ]

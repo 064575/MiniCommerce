@@ -1,0 +1,14 @@
+[
+  {
+    "Id": "1db295d3-6107-48e2-830b-37e4fe7017ba",
+    "UserId": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
+    "CreatedAt": "2026-09-09T18:06:49.3392637Z",
+    "Status": "Completed",
+    "Items": [
+      {
+        "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
+        "Quantity": 2
+      }
+    ]
+  }
+]
