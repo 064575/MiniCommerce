@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Net;
 
 namespace OrderService.Clients;
 
@@ -20,6 +21,12 @@ public class InventoryClient : IInventoryClient
                 productId,
                 quantity
             });
+
+        if (response.StatusCode == HttpStatusCode.Conflict)
+        {
+            throw new InvalidOperationException(
+                "Not enough inventory available for this product.");
+        }
 
         response.EnsureSuccessStatusCode();
     }

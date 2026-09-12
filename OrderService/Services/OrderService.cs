@@ -83,6 +83,8 @@ public class OrderService : IOrderService
 
         var reservedItems = new List<CreateOrderItemRequest>();
 
+        // 1. Prvo rezervišemo sve stavke.
+        // Ako neka rezervacija padne, vraćamo prethodno rezervisane.
         try
         {
             foreach (var item in request.Items)
@@ -93,34 +95,6 @@ public class OrderService : IOrderService
 
                 reservedItems.Add(item);
             }
-
-            var order = new Order
-            {
-                Id = Guid.NewGuid(),
-                UserId = request.UserId,
-                CreatedAt = DateTime.UtcNow,
-                Status = "Pending",
-                Items = request.Items.Select(item => new OrderItem
-                {
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity
-                }).ToList()
-            };
-
-            await _orderRepository.AddAsync(order);
-
-            foreach (var item in request.Items)
-            {
-                await _inventoryClient.ConfirmAsync(
-                    item.ProductId,
-                    item.Quantity);
-            }
-
-            order.Status = "Completed";
-
-            await _orderRepository.UpdateAsync(order);
-
-            return ToDto(order);
         }
         catch
         {
@@ -135,13 +109,53 @@ public class OrderService : IOrderService
                 catch
                 {
                     // Za sada samo pokušavamo rollback.
-                    // Kasnije možemo dodati detaljniji logging.
                 }
             }
 
             throw;
         }
+
+        // 2. Sve je rezervisano - kreiramo Pending order.
+        var order = new Order
+        {
+            Id = Guid.NewGuid(),
+            UserId = request.UserId,
+            CreatedAt = DateTime.UtcNow,
+            Status = "Pending",
+            Items = request.Items.Select(item => new OrderItem
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity
+            }).ToList()
+        };
+
+        await _orderRepository.AddAsync(order);
+
+        // 3. Potvrđujemo rezervacije.
+        try
+        {
+            foreach (var item in request.Items)
+            {
+                await _inventoryClient.ConfirmAsync(
+                    item.ProductId,
+                    item.Quantity);
+            }
+
+            order.Status = "Completed";
+            await _orderRepository.UpdateAsync(order);
+
+            return ToDto(order);
+        }
+        catch
+        {
+            // Order je već napravljen, zato ga ne ostavljamo kao Pending.
+            order.Status = "Failed";
+            await _orderRepository.UpdateAsync(order);
+
+            throw;
+        }
     }
+        
 
     private static OrderDto ToDto(Order order)
     {
