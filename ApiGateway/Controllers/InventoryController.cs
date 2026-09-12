@@ -13,6 +13,23 @@ public class InventoryController : ControllerBase
         _httpClient = httpClientFactory.CreateClient("InventoryService");
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var response = await _httpClient.GetAsync("inventory");
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return new ContentResult
+        {
+            StatusCode = (int)response.StatusCode,
+            Content = content,
+            ContentType = "application/json"
+        };
+    }
+
+
     [HttpGet("{productId:guid}")]
     public async Task<IActionResult> GetByProductId(Guid productId)
     {

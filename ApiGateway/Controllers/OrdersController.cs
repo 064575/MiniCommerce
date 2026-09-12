@@ -30,7 +30,22 @@ public class OrdersController : ControllerBase
         };
     }
 
-[HttpPost]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var response = await _httpClient.GetAsync($"orders/{id}");
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        return new ContentResult
+        {
+            StatusCode = (int)response.StatusCode,
+            Content = content,
+            ContentType = "application/json"
+        };
+    }
+
+    [HttpPost]
 public async Task<IActionResult> Create(CreateOrderRequest request)
 {
     var response = await _httpClient.PostAsJsonAsync(

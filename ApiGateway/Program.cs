@@ -1,3 +1,6 @@
+using ApiGateway.Exceptions;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,31 +13,52 @@ builder.Services.AddHttpClient("UserService", client =>
 {
     client.BaseAddress = new Uri(
         builder.Configuration["Services:UserService"]!);
+
+    client.Timeout = TimeSpan.FromSeconds(5);
+
 });
 builder.Services.AddHttpClient("ProductService", client =>
 {
     client.BaseAddress = new Uri(
         builder.Configuration["Services:ProductService"]!);
+
+    client.Timeout = TimeSpan.FromSeconds(5);
 });
+
+
 builder.Services.AddHttpClient("InventoryService", client =>
 {
     client.BaseAddress = new Uri(
         builder.Configuration["Services:InventoryService"]!);
+
+    client.Timeout = TimeSpan.FromSeconds(5);
+
 });
+
+
 builder.Services.AddHttpClient("OrderService", client =>
 {
     client.BaseAddress = new Uri(
         builder.Configuration["Services:OrderService"]!);
+
+    client.Timeout = TimeSpan.FromSeconds(5);
 });
+
+
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
+
+app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.UseHttpsRedirection();
 
