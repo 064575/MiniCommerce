@@ -3,6 +3,9 @@ import ProductCard from './components/ProductCard'
 import './App.css'
 import Cart from './components/Cart'
 
+const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+
 function App() {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
@@ -13,7 +16,7 @@ function App() {
     useEffect(() => {
         async function loadProducts() {
             try {
-                const response = await fetch('http://localhost:5000/api/catalog')
+                const response = await fetch(`${API_BASE_URL}/api/catalog`)
 
                 if (!response.ok) {
                     throw new Error('Greška pri učitavanju proizvoda.')
@@ -95,7 +98,7 @@ function App() {
 
         try {
             const response = await fetch(
-                'http://localhost:5000/api/orders',
+                `${API_BASE_URL}/api/orders`,
                 {
                     method: 'POST',
                     headers: {
