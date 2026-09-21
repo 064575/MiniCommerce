@@ -70,15 +70,41 @@ public class OrderService : IOrderService
             throw new InvalidOperationException("User does not exist.");
         }
 
+        var orderItems = new List<OrderItem>();
+
         foreach (var item in request.Items)
         {
-            var productExists = await _productClient.ExistsAsync(item.ProductId);
+            if (item.ProductId == Guid.Empty)
+            {
+                throw new ArgumentException("ProductId is required.");
+            }
 
-            if (!productExists)
+            if (item.Quantity <= 0)
+            {
+                throw new ArgumentException(
+                    "Quantity must be greater than zero.");
+            }
+
+            var product = await _productClient.GetByIdAsync(item.ProductId);
+
+            if (product is null)
             {
                 throw new InvalidOperationException(
                     $"Product {item.ProductId} does not exist.");
             }
+
+            if (!product.IsActive)
+            {
+                throw new InvalidOperationException(
+                    $"Product {item.ProductId} is not active.");
+            }
+
+            orderItems.Add(new OrderItem
+            {
+                ProductId = item.ProductId,
+                Quantity = item.Quantity,
+                UnitPrice = product.Price
+            });
         }
 
         var reservedItems = new List<CreateOrderItemRequest>();
@@ -122,11 +148,9 @@ public class OrderService : IOrderService
             UserId = request.UserId,
             CreatedAt = DateTime.UtcNow,
             Status = "Pending",
-            Items = request.Items.Select(item => new OrderItem
-            {
-                ProductId = item.ProductId,
-                Quantity = item.Quantity
-            }).ToList()
+            Items = orderItems,
+            TotalPrice = orderItems.Sum(
+                item => item.UnitPrice * item.Quantity)
         };
 
         await _orderRepository.AddAsync(order);
@@ -155,7 +179,7 @@ public class OrderService : IOrderService
             throw;
         }
     }
-        
+
 
     private static OrderDto ToDto(Order order)
     {
@@ -165,10 +189,12 @@ public class OrderService : IOrderService
             UserId = order.UserId,
             CreatedAt = order.CreatedAt,
             Status = order.Status,
+            TotalPrice = order.TotalPrice,
             Items = order.Items.Select(item => new OrderItemDto
             {
                 ProductId = item.ProductId,
-                Quantity = item.Quantity
+                Quantity = item.Quantity,
+                UnitPrice = item.UnitPrice
             }).ToList()
         };
     }

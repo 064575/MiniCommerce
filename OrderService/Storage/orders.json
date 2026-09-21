@@ -4,10 +4,12 @@
     "UserId": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
     "CreatedAt": "2026-09-09T18:06:49.3392637Z",
     "Status": "Completed",
+    "TotalPrice": 0,
     "Items": [
       {
         "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
-        "Quantity": 2
+        "Quantity": 2,
+        "UnitPrice": 0
       }
     ]
   },
@@ -16,10 +18,64 @@
     "UserId": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
     "CreatedAt": "2026-09-12T18:06:49.8062847Z",
     "Status": "Completed",
+    "TotalPrice": 0,
     "Items": [
       {
         "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
-        "Quantity": 1
+        "Quantity": 1,
+        "UnitPrice": 0
+      }
+    ]
+  },
+  {
+    "Id": "4a931090-0d2f-493d-8fb3-a8bc7d52c310",
+    "UserId": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
+    "CreatedAt": "2026-09-15T17:51:34.111774Z",
+    "Status": "Completed",
+    "TotalPrice": 0,
+    "Items": [
+      {
+        "ProductId": "62d94414-6081-4e22-80ad-e3aa849af5b2",
+        "Quantity": 1,
+        "UnitPrice": 0
+      },
+      {
+        "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
+        "Quantity": 1,
+        "UnitPrice": 0
+      }
+    ]
+  },
+  {
+    "Id": "de5b0263-28df-41b5-9c5f-1b51c278ba2b",
+    "UserId": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
+    "CreatedAt": "2026-09-17T11:41:00.1798299Z",
+    "Status": "Completed",
+    "TotalPrice": 0,
+    "Items": [
+      {
+        "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
+        "Quantity": 4,
+        "UnitPrice": 0
+      },
+      {
+        "ProductId": "62d94414-6081-4e22-80ad-e3aa849af5b2",
+        "Quantity": 2,
+        "UnitPrice": 0
+      }
+    ]
+  },
+  {
+    "Id": "167ee80c-3de6-4bd8-b5bf-5f159b318c8a",
+    "UserId": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
+    "CreatedAt": "2026-09-21T17:00:26.7898002Z",
+    "Status": "Completed",
+    "TotalPrice": 100,
+    "Items": [
+      {
+        "ProductId": "fadc7a6d-2007-4c47-a7c0-bb3e283f02b5",
+        "Quantity": 1,
+        "UnitPrice": 100
       }
     ]
   }

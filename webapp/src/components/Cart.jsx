@@ -1,4 +1,10 @@
-function Cart({ cart, onIncrease, onDecrease, onRemove }) {
+function Cart({
+    cart,
+    onIncrease,
+    onDecrease,
+    onRemove,
+    onCreateOrder
+}) {
     const totalPrice = cart.reduce(
         (total, item) => total + item.price * item.quantity,
         0
@@ -38,7 +44,12 @@ function Cart({ cart, onIncrease, onDecrease, onRemove }) {
 
                     <p className="cart-total">
                         Ukupno: {totalPrice.toFixed(2)} RSD
-                    </p>
+                        </p>
+
+                        <button onClick={onCreateOrder}>
+                            Naruči
+                        </button>
+
                 </div>
             )}
         </div>

@@ -1,4 +1,8 @@
-﻿namespace OrderService.Clients;
+﻿using OrderService.DTOs;
+using System.Net;
+using System.Net.Http.Json;
+
+namespace OrderService.Clients;
 
 public class ProductClient : IProductClient
 {
@@ -9,22 +13,22 @@ public class ProductClient : IProductClient
         _httpClient = httpClient;
     }
 
-    public async Task<bool> ExistsAsync(Guid productId)
+
+    public async Task<ProductDto?> GetByIdAsync(Guid productId)
     {
-        var response = await _httpClient.GetAsync($"products/{productId}");
+        var response = await _httpClient.GetAsync(
+            $"products/{productId}"
+        );
 
-        if (response.IsSuccessStatusCode)
+        if (response.StatusCode == HttpStatusCode.NotFound)
         {
-            return true;
-        }
-
-        if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-        {
-            return false;
+            return null;
         }
 
         response.EnsureSuccessStatusCode();
 
-        return false;
+        return await response.Content
+            .ReadFromJsonAsync<ProductDto>();
     }
+
 }

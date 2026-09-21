@@ -8,6 +8,7 @@ function App() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [cart, setCart] = useState([])
+    const [orderMessage, setOrderMessage] = useState('')
 
     useEffect(() => {
         async function loadProducts() {
@@ -80,6 +81,53 @@ function App() {
         )
     }
 
+    async function createOrder() {
+
+        setOrderMessage('')
+
+        const request = {
+            userId: '513e2dd0-1146-4944-bd50-4d3287a69fe1',
+            items: cart.map(item => ({
+                productId: item.id,
+                quantity: item.quantity
+            }))
+        }
+
+        try {
+            const response = await fetch(
+                'http://localhost:5000/api/orders',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(request)
+                }
+            )
+
+            if (!response.ok) {
+                throw new Error('Porudžbina nije uspešno kreirana.')
+            }
+
+            const order = await response.json()
+
+            console.log('Kreirana porudžbina:', order)
+
+            setOrderMessage(
+                `Porudžbina je uspešno kreirana! Status: ${order.status}. Ukupno: ${order.totalPrice.toFixed(2)} RSD`
+            )
+
+            setCart([])
+        } catch (error) {
+            console.error(error)
+
+            setOrderMessage(
+                `Greška: ${error.message}`
+            )
+        }
+    }
+
+
     if (loading) {
         return <p>Učitavanje proizvoda...</p>
     }
@@ -92,6 +140,12 @@ function App() {
         <div>
             <h1>MiniCommerce</h1>
 
+            {orderMessage && (
+                <p className="order-message">
+                    {orderMessage}
+                </p>
+            )}
+
             <p className="cart-count">
                 Korpa: {cart.length}
             </p>
@@ -101,6 +155,7 @@ function App() {
                 onIncrease={increaseQuantity}
                 onDecrease={decreaseQuantity}
                 onRemove={removeFromCart}
+                onCreateOrder={createOrder}
             />
 
             <h2>Proizvodi</h2>
