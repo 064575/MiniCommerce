@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Identity;
+using UserService.Exceptions;
+using UserService.Models;
 using UserService.Repositories;
 using UserService.Services;
-using UserService.Exceptions;
+using UserService.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService.Services.UserService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddScoped<
+    IPasswordHasher<User>,
+    PasswordHasher<User>>();
+builder.Services.AddScoped<JwtTokenService>();
 
 var app = builder.Build();
 app.UseExceptionHandler();

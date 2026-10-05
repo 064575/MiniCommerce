@@ -46,4 +46,14 @@ public class UsersController : ControllerBase
             user
         );
     }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<LoginResponse>> Login(
+    LoginRequest request)
+    {
+        var result = await _userService.LoginAsync(request);
+
+        return Ok(result);
+    }
+
 }

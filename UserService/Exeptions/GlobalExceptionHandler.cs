@@ -24,8 +24,11 @@ public class GlobalExceptionHandler : IExceptionHandler
             ArgumentException =>
                 (StatusCodes.Status400BadRequest, exception.Message),
 
+            AuthenticationException =>
+                (StatusCodes.Status401Unauthorized, exception.Message),
+
             InvalidOperationException =>
-                (StatusCodes.Status409Conflict, exception.Message),
+            (StatusCodes.Status409Conflict, exception.Message),
 
             _ =>
                 (StatusCodes.Status500InternalServerError,

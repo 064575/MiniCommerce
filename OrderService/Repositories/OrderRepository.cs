@@ -41,6 +41,15 @@ public class OrderRepository : IOrderRepository
         return orders.FirstOrDefault(x => x.Id == id);
     }
 
+    public async Task<List<Order>> GetByUserIdAsync(Guid userId)
+    {
+        var orders = await GetAllAsync();
+
+        return orders
+            .Where(x => x.UserId == userId)
+            .ToList();
+    }
+
     public async Task AddAsync(Order order)
     {
         var orders = await GetAllAsync();
@@ -64,6 +73,7 @@ public class OrderRepository : IOrderRepository
         existingOrder.UserId = order.UserId;
         existingOrder.CreatedAt = order.CreatedAt;
         existingOrder.Status = order.Status;
+        existingOrder.TotalPrice = order.TotalPrice;
         existingOrder.Items = order.Items;
 
         await SaveAllAsync(orders);
@@ -80,4 +90,7 @@ public class OrderRepository : IOrderRepository
 
         await File.WriteAllTextAsync(_filePath, json);
     }
+
+
+
 }

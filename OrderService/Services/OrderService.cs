@@ -38,6 +38,28 @@ public class OrderService : IOrderService
         return order is null ? null : ToDto(order);
     }
 
+    public async Task<OrderDto?> GetByIdAndUserIdAsync(Guid id, Guid userId)
+    {
+        var order = await _orderRepository.GetByIdAsync(id);
+
+        if (order is null || order.UserId != userId)
+        {
+            return null;
+        }
+
+        return ToDto(order);
+    }
+
+    public async Task<List<OrderDto>> GetByUserIdAsync(Guid userId)
+    {
+        var orders = await _orderRepository.GetByUserIdAsync(userId);
+
+        return orders
+            .Select(ToDto)
+            .ToList();
+    }
+
+
     public async Task<OrderDto> CreateAsync(CreateOrderRequest request)
     {
         if (request.UserId == Guid.Empty)

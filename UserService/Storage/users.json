@@ -2,21 +2,31 @@
   {
     "Id": "43fdc58b-fce2-4af5-ac1b-2997a276278a",
     "Name": "Marko",
-    "Email": "marko@test.com"
+    "Email": "marko@test.com",
+    "PasswordHash": ""
   },
   {
     "Id": "f35751b5-d771-43e9-952b-1fc5c7cbd9bf",
     "Name": "Marko",
-    "Email": "marko@test.com"
+    "Email": "marko@test.com",
+    "PasswordHash": ""
   },
   {
     "Id": "156ff459-a111-4c14-8fdc-881f07e24014",
     "Name": "Ana",
-    "Email": "ana@test.com"
+    "Email": "ana@test.com",
+    "PasswordHash": ""
   },
   {
     "Id": "513e2dd0-1146-4944-bd50-4d3287a69fe1",
     "Name": "Test User",
-    "Email": "test@minicommerce.com"
+    "Email": "test@minicommerce.com",
+    "PasswordHash": ""
+  },
+  {
+    "Id": "869c6745-5143-4915-ab05-9319989ea640",
+    "Name": "Test Login User",
+    "Email": "login@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEK\u002ByfcHhOXAj3rYwDzcIOxRhkTKoDExi\u002BrZXTJhz0Dvk1SuCtxIyAVygCIJyRZv/ew=="
   }
 ]

@@ -35,6 +35,32 @@ public class OrdersController : ControllerBase
         return Ok(order);
     }
 
+    [HttpGet("{id:guid}/user/{userId:guid}")]
+    public async Task<ActionResult<OrderDto>> GetByIdAndUserId(
+    Guid id,
+    Guid userId)
+    {
+        var order = await _orderService.GetByIdAndUserIdAsync(
+            id,
+            userId);
+
+        if (order is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(order);
+    }
+
+
+    [HttpGet("user/{userId:guid}")]
+    public async Task<ActionResult<List<OrderDto>>> GetByUserId(Guid userId)
+    {
+        var orders = await _orderService.GetByUserIdAsync(userId);
+
+        return Ok(orders);
+    }
+
     [HttpPost]
     public async Task<ActionResult<OrderDto>> Create(CreateOrderRequest request)
     {
