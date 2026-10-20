@@ -12,6 +12,10 @@ function App() {
     const [error, setError] = useState('')
     const [cart, setCart] = useState([])
     const [orderMessage, setOrderMessage] = useState('')
+    const [token, setToken] = useState('')
+    const [currentUser, setCurrentUser] = useState(null)
+    const [loginEmail, setLoginEmail] = useState('')
+    const [loginPassword, setLoginPassword] = useState('')
 
     useEffect(() => {
         async function loadProducts() {
@@ -33,6 +37,52 @@ function App() {
 
         loadProducts()
     }, [])
+
+    async function login() {
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/users/login`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: loginEmail,
+                        password: loginPassword
+                    })
+                }
+            )
+
+            if (!response.ok) {
+                throw new Error('Pogrešan email ili lozinka.')
+            }
+
+            const data = await response.json()
+
+            setToken(data.token)
+
+            setCurrentUser({
+                userId: data.userId,
+                name: data.name,
+                email: data.email
+            })
+
+            setLoginPassword('')
+
+        } catch (err) {
+            console.error(err)
+            alert(err.message)
+        }
+    }
+
+    function logout() {
+        setToken('')
+        setCurrentUser(null)
+        setLoginEmail('')
+        setLoginPassword('')
+        setOrderMessage('')
+    }
 
     function addToCart(product) {
         const existingItem = cart.find(
@@ -85,11 +135,16 @@ function App() {
     }
 
     async function createOrder() {
-
         setOrderMessage('')
 
+        if (!token) {
+            setOrderMessage(
+                'Morate se prijaviti pre kreiranja porudžbine.'
+            )
+            return
+        }
+
         const request = {
-            userId: '513e2dd0-1146-4944-bd50-4d3287a69fe1',
             items: cart.map(item => ({
                 productId: item.id,
                 quantity: item.quantity
@@ -102,14 +157,23 @@ function App() {
                 {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(request)
                 }
             )
 
             if (!response.ok) {
-                throw new Error('Porudžbina nije uspešno kreirana.')
+                if (response.status === 401) {
+                    throw new Error(
+                        'Prijava nije važeća. Prijavite se ponovo.'
+                    )
+                }
+
+                throw new Error(
+                    'Porudžbina nije uspešno kreirana.'
+                )
             }
 
             const order = await response.json()
@@ -124,9 +188,7 @@ function App() {
         } catch (error) {
             console.error(error)
 
-            setOrderMessage(
-                `Greška: ${error.message}`
-            )
+            setOrderMessage(`Greška: ${error.message}`)
         }
     }
 
@@ -142,6 +204,55 @@ function App() {
     return (
         <div>
             <h1>MiniCommerce</h1>
+
+            {currentUser ? (
+                <div>
+                    <p>Dobrodošao, {currentUser.name}!</p>
+
+                    <button type="button" onClick={logout}>
+                        Odjavi se
+                    </button>
+                </div>
+            ) : (
+                <div>
+                    <h2>Prijava</h2>
+
+                    <form onSubmit={async (event) => {
+                        event.preventDefault()
+                        await login()
+                    }}>
+                        <div>
+                            <label htmlFor="login-email">Email:</label>
+                            <input
+                                id="login-email"
+                                type="email"
+                                value={loginEmail}
+                                onChange={(event) =>
+                                    setLoginEmail(event.target.value)
+                                }
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="login-password">Lozinka:</label>
+                            <input
+                                id="login-password"
+                                type="password"
+                                value={loginPassword}
+                                onChange={(event) =>
+                                    setLoginPassword(event.target.value)
+                                }
+                                required
+                            />
+                        </div>
+
+                        <button type="submit">
+                            Prijavi se
+                        </button>
+                    </form>
+                </div>
+            )}
 
             {orderMessage && (
                 <p className="order-message">

@@ -28,5 +28,11 @@
     "Name": "Test Login User",
     "Email": "login@test.com",
     "PasswordHash": "AQAAAAIAAYagAAAAEK\u002ByfcHhOXAj3rYwDzcIOxRhkTKoDExi\u002BrZXTJhz0Dvk1SuCtxIyAVygCIJyRZv/ew=="
+  },
+  {
+    "Id": "aa6b61a6-248b-4003-9e3e-4db3b8102bbb",
+    "Name": "Novi Kupac",
+    "Email": "novikupac@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEJqcFcHG1th9Ba0CLfVUwXeTmJhiflOCDdaekXHBjWsRryKo09SX8rpHI3RUgY9Ixw=="
   }
 ]
