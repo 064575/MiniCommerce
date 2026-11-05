@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+
+
+import { useEffect, useRef, useState } from 'react'
 import ProductCard from './components/ProductCard'
 import './App.css'
 import Cart from './components/Cart'
@@ -9,13 +11,23 @@ const API_BASE_URL =
 function App() {
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(true)
+
     const [error, setError] = useState('')
     const [cart, setCart] = useState([])
     const [orderMessage, setOrderMessage] = useState('')
+
     const [token, setToken] = useState('')
     const [currentUser, setCurrentUser] = useState(null)
     const [loginEmail, setLoginEmail] = useState('')
     const [loginPassword, setLoginPassword] = useState('')
+
+    const [orders, setOrders] = useState([])
+    const [ordersLoading, setOrdersLoading] = useState(false)
+    const [ordersError, setOrdersError] = useState('')
+
+    const [showOrders, setShowOrders] = useState(false)
+
+    const ordersAbortController = useRef(null)
 
     useEffect(() => {
         async function loadProducts() {
@@ -77,11 +89,72 @@ function App() {
     }
 
     function logout() {
+
+        ordersAbortController.current?.abort()
+        ordersAbortController.current = null
+
         setToken('')
         setCurrentUser(null)
         setLoginEmail('')
         setLoginPassword('')
         setOrderMessage('')
+
+        setOrders([])
+        setOrdersLoading(false)
+        setOrdersError('')
+
+        setShowOrders(false)
+
+    }
+
+    async function loadOrders() {
+        if (!token) {
+            return
+        }
+
+        ordersAbortController.current?.abort()
+
+        const controller = new AbortController()
+        ordersAbortController.current = controller
+
+        setOrdersLoading(true)
+        setOrdersError('')
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/api/orders`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    signal: controller.signal
+                }
+            )
+
+            if (!response.ok) {
+                throw new Error(
+                    'Greška pri učitavanju porudžbina.'
+                )
+            }
+
+            const data = await response.json()
+
+            if (!controller.signal.aborted) {
+                setOrders(data)
+            }
+
+        } catch (err) {
+            if (!controller.signal.aborted) {
+                console.error(err)
+                setOrdersError(err.message)
+            }
+
+        } finally {
+            if (ordersAbortController.current === controller) {
+                ordersAbortController.current = null
+                setOrdersLoading(false)
+            }
+        }
     }
 
     function addToCart(product) {
@@ -185,6 +258,11 @@ function App() {
             )
 
             setCart([])
+
+            if (showOrders) {
+                await loadOrders()
+            }
+
         } catch (error) {
             console.error(error)
 
@@ -208,6 +286,20 @@ function App() {
             {currentUser ? (
                 <div>
                     <p>Dobrodošao, {currentUser.name}!</p>
+
+                    <button
+                        type="button"
+                        onClick={() => {
+                            if (showOrders) {
+                                setShowOrders(false)
+                            } else {
+                                setShowOrders(true)
+                                loadOrders()
+                            }
+                        }}
+                    >
+                        {showOrders ? 'Sakrij porudžbine' : 'Moje porudžbine'}
+                    </button>
 
                     <button type="button" onClick={logout}>
                         Odjavi se
@@ -258,6 +350,32 @@ function App() {
                 <p className="order-message">
                     {orderMessage}
                 </p>
+            )}
+
+            {currentUser && showOrders && (
+                <section>
+                    <h2>Moje porudžbine</h2>
+
+                    {ordersLoading && <p>Učitavanje porudžbina...</p>}
+
+                    {ordersError && <p>{ordersError}</p>}
+
+                    {!ordersLoading && !ordersError && orders.length === 0 && (
+                        <p>Nema učitanih porudžbina.</p>
+                    )}
+
+                    {orders.map(order => (
+                        <div key={order.id}>
+                            <p>Broj porudžbine: {order.id}</p>
+                            <p>Status: {order.status}</p>
+                            <p>Ukupno: {order.totalPrice.toFixed(2)} RSD</p>
+                            <p>
+                                Datum: {new Date(order.createdAt).toLocaleString('sr-RS')}
+                            </p>
+                            <hr />
+                        </div>
+                    ))}
+                </section>
             )}
 
             <p className="cart-count">
