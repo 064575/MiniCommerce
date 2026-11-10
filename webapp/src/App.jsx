@@ -372,6 +372,21 @@ function App() {
                             <p>
                                 Datum: {new Date(order.createdAt).toLocaleString('sr-RS')}
                             </p>
+
+                            <h3>Stavke porudžbine</h3>
+
+                            <ul>
+                                {order.items.map(item => (
+                                    <li key={item.productId}>
+                                        Proizvod: {item.productName || products.find(p => p.id === item.productId)?.name || item.productId}
+                                        {' | '}
+                                        Količina: {item.quantity}
+                                        {' | '}
+                                        Jedinična cena: {item.unitPrice.toFixed(2)} RSD
+                                    </li>
+                                ))}
+                            </ul>
+
                             <hr />
                         </div>
                     ))}

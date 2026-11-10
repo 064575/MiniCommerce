@@ -124,6 +124,7 @@ public class OrderService : IOrderService
             orderItems.Add(new OrderItem
             {
                 ProductId = item.ProductId,
+                ProductName = product.Name,
                 Quantity = item.Quantity,
                 UnitPrice = product.Price
             });
@@ -215,8 +216,10 @@ public class OrderService : IOrderService
             Items = order.Items.Select(item => new OrderItemDto
             {
                 ProductId = item.ProductId,
+                ProductName = item.ProductName,
                 Quantity = item.Quantity,
                 UnitPrice = item.UnitPrice
+                
             }).ToList()
         };
     }
