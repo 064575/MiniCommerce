@@ -32,8 +32,9 @@ public class JwtTokenService
                 user.Id.ToString()),
 
             new Claim(
-                ClaimTypes.Name,
-                user.Name),
+    ClaimTypes.Name,
+    $"{user.FirstName} {user.LastName}"
+),
 
             new Claim(
                 ClaimTypes.Email,

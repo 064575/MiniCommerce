@@ -30,7 +30,8 @@ public class UserService : IUserService
         return users.Select(user => new UserDto
         {
             Id = user.Id,
-            Name = user.Name,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             Email = user.Email
         }).ToList();
     }
@@ -47,16 +48,23 @@ public class UserService : IUserService
         return new UserDto
         {
             Id = user.Id,
-            Name = user.Name,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             Email = user.Email
         };
     }
 
+
     public async Task<UserDto> CreateAsync(CreateUserRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Name))
+        if (string.IsNullOrWhiteSpace(request.FirstName))
         {
-            throw new ArgumentException("Name is required.");
+            throw new ArgumentException("First name is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.LastName))
+        {
+            throw new ArgumentException("Last name is required.");
         }
 
         if (string.IsNullOrWhiteSpace(request.Email))
@@ -75,7 +83,8 @@ public class UserService : IUserService
                 "Password must contain at least 8 characters.");
         }
 
-        var existingUser = await _userRepository.GetByEmailAsync(request.Email);
+        var existingUser = await _userRepository.GetByEmailAsync(
+            request.Email.Trim());
 
         if (existingUser is not null)
         {
@@ -86,18 +95,22 @@ public class UserService : IUserService
         var user = new User
         {
             Id = Guid.NewGuid(),
-            Name = request.Name.Trim(),
+            FirstName = request.FirstName.Trim(),
+            LastName = request.LastName.Trim(),
             Email = request.Email.Trim()
         };
 
-        user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+        user.PasswordHash = _passwordHasher.HashPassword(
+            user,
+            request.Password);
 
         await _userRepository.AddAsync(user);
 
         return new UserDto
         {
             Id = user.Id,
-            Name = user.Name,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             Email = user.Email
         };
     }
@@ -139,7 +152,8 @@ public class UserService : IUserService
         return new LoginResponse
         {
             UserId = user.Id,
-            Name = user.Name,
+            FirstName = user.FirstName,
+            LastName= user.LastName,
             Email = user.Email,
             Token = token
         };

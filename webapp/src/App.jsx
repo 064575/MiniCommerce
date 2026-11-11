@@ -29,7 +29,8 @@ function App() {
 
     const ordersAbortController = useRef(null)
 
-    const [registerName, setRegisterName] = useState('')
+    const [registerFirstName, setRegisterFirstName] = useState('')
+    const [registerLastName, setRegisterLastName] = useState('')
     const [registerEmail, setRegisterEmail] = useState('')
     const [registerPassword, setRegisterPassword] = useState('')
     const [showRegister, setShowRegister] = useState(false)
@@ -63,8 +64,9 @@ function App() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: registerName,
-                    email: registerEmail,
+                    firstName: registerFirstName.trim(),
+                    lastName: registerLastName.trim(),
+                    email: registerEmail.trim(),
                     password: registerPassword
                 })
             })
@@ -75,9 +77,11 @@ function App() {
 
             alert('Registracija uspešna! Sada možeš da se prijaviš.')
 
-            setLoginEmail(registerEmail)
+            setLoginEmail(registerEmail.trim())
             setLoginPassword('')
-            setRegisterName('')
+
+            setRegisterFirstName('')
+            setRegisterLastName('')
             setRegisterEmail('')
             setRegisterPassword('')
             setShowRegister(false)
@@ -114,7 +118,8 @@ function App() {
 
             setCurrentUser({
                 userId: data.userId,
-                name: data.name,
+                firstName: data.firstName,
+                lastName: data.lastName,
                 email: data.email
             })
 
@@ -323,7 +328,7 @@ function App() {
 
             {currentUser ? (
                 <div>
-                    <p>Dobrodošao, {currentUser.name}!</p>
+                    <p>Dobrodošao, {currentUser.firstName} {currentUser.lastName}!</p>
 
                     <button
                         type="button"
@@ -354,18 +359,33 @@ function App() {
                                 event.preventDefault()
                                 await register()
                             }}>
-                                <div>
-                                    <label htmlFor="register-name">Ime:</label>
-                                    <input
-                                        id="register-name"
-                                        type="text"
-                                        value={registerName}
-                                        onChange={(event) =>
-                                            setRegisterName(event.target.value)
-                                        }
-                                        required
-                                    />
-                                </div>
+
+                                    <div>
+                                        <label htmlFor="register-first-name">Ime:</label>
+                                        <input
+                                            id="register-first-name"
+                                            type="text"
+                                            value={registerFirstName}
+                                            onChange={(event) =>
+                                                setRegisterFirstName(event.target.value)
+                                            }
+                                            required
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="register-last-name">Prezime:</label>
+                                        <input
+                                            id="register-last-name"
+                                            type="text"
+                                            value={registerLastName}
+                                            onChange={(event) =>
+                                                setRegisterLastName(event.target.value)
+                                            }
+                                            required
+                                        />
+                                    </div>
+
 
                                 <div>
                                     <label htmlFor="register-email">Email:</label>
