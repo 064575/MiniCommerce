@@ -34,5 +34,11 @@
     "Name": "Novi Kupac",
     "Email": "novikupac@test.com",
     "PasswordHash": "AQAAAAIAAYagAAAAEJqcFcHG1th9Ba0CLfVUwXeTmJhiflOCDdaekXHBjWsRryKo09SX8rpHI3RUgY9Ixw=="
+  },
+  {
+    "Id": "bc90a44b-41af-4582-915e-b185141e510d",
+    "Name": "Test Korisnik",
+    "Email": "testregistracija2026@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEHN/cCRJhMmYB/uZ9uaFRWr26fYqJUKWu07hyKBNRojtTp4B2kkFVFCWpzFqNOv0cw=="
   }
 ]

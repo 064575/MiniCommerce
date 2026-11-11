@@ -29,6 +29,11 @@ function App() {
 
     const ordersAbortController = useRef(null)
 
+    const [registerName, setRegisterName] = useState('')
+    const [registerEmail, setRegisterEmail] = useState('')
+    const [registerPassword, setRegisterPassword] = useState('')
+    const [showRegister, setShowRegister] = useState(false)
+
     useEffect(() => {
         async function loadProducts() {
             try {
@@ -49,6 +54,39 @@ function App() {
 
         loadProducts()
     }, [])
+
+    async function register() {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/users`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: registerName,
+                    email: registerEmail,
+                    password: registerPassword
+                })
+            })
+
+            if (!response.ok) {
+                throw new Error('Registracija nije uspela.')
+            }
+
+            alert('Registracija uspešna! Sada možeš da se prijaviš.')
+
+            setLoginEmail(registerEmail)
+            setLoginPassword('')
+            setRegisterName('')
+            setRegisterEmail('')
+            setRegisterPassword('')
+            setShowRegister(false)
+
+        } catch (err) {
+            console.error(err)
+            alert(err.message)
+        }
+    }
 
     async function login() {
         try {
@@ -305,46 +343,118 @@ function App() {
                         Odjavi se
                     </button>
                 </div>
+
             ) : (
                 <div>
-                    <h2>Prijava</h2>
-
-                    <form onSubmit={async (event) => {
-                        event.preventDefault()
-                        await login()
-                    }}>
+                    {showRegister ? (
                         <div>
-                            <label htmlFor="login-email">Email:</label>
-                            <input
-                                id="login-email"
-                                type="email"
-                                value={loginEmail}
-                                onChange={(event) =>
-                                    setLoginEmail(event.target.value)
-                                }
-                                required
-                            />
-                        </div>
+                            <h2>Registracija</h2>
 
+                            <form onSubmit={async (event) => {
+                                event.preventDefault()
+                                await register()
+                            }}>
+                                <div>
+                                    <label htmlFor="register-name">Ime:</label>
+                                    <input
+                                        id="register-name"
+                                        type="text"
+                                        value={registerName}
+                                        onChange={(event) =>
+                                            setRegisterName(event.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="register-email">Email:</label>
+                                    <input
+                                        id="register-email"
+                                        type="email"
+                                        value={registerEmail}
+                                        onChange={(event) =>
+                                            setRegisterEmail(event.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="register-password">Lozinka:</label>
+                                    <input
+                                        id="register-password"
+                                        type="password"
+                                        value={registerPassword}
+                                        onChange={(event) =>
+                                            setRegisterPassword(event.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <button type="submit">
+                                    Registruj se
+                                </button>
+                            </form>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowRegister(false)}
+                            >
+                                Nazad na prijavu
+                            </button>
+                        </div>
+                    ) : (
                         <div>
-                            <label htmlFor="login-password">Lozinka:</label>
-                            <input
-                                id="login-password"
-                                type="password"
-                                value={loginPassword}
-                                onChange={(event) =>
-                                    setLoginPassword(event.target.value)
-                                }
-                                required
-                            />
-                        </div>
+                            <h2>Prijava</h2>
 
-                        <button type="submit">
-                            Prijavi se
-                        </button>
-                    </form>
+                            <form onSubmit={async (event) => {
+                                event.preventDefault()
+                                await login()
+                            }}>
+                                <div>
+                                    <label htmlFor="login-email">Email:</label>
+                                    <input
+                                        id="login-email"
+                                        type="email"
+                                        value={loginEmail}
+                                        onChange={(event) =>
+                                            setLoginEmail(event.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <div>
+                                    <label htmlFor="login-password">Lozinka:</label>
+                                    <input
+                                        id="login-password"
+                                        type="password"
+                                        value={loginPassword}
+                                        onChange={(event) =>
+                                            setLoginPassword(event.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
+
+                                <button type="submit">
+                                    Prijavi se
+                                </button>
+                            </form>
+
+                            <button
+                                type="button"
+                                onClick={() => setShowRegister(true)}
+                            >
+                                Napravi nalog
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
+
 
             {orderMessage && (
                 <p className="order-message">
