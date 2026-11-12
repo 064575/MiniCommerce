@@ -5,5 +5,26 @@
     "LastName": "Markovi\u0107",
     "Email": "marko2026@test.com",
     "PasswordHash": "AQAAAAIAAYagAAAAELYIexVF21UE015BR78OCrdDPP9kUnOwm9ESMJLVTQek1QqtBLTRZVGKB12HwSDrSQ=="
+  },
+  {
+    "Id": "03e6f675-55d2-4e98-b834-336d759ae379",
+    "FirstName": "admin",
+    "LastName": "admin",
+    "Email": "admin@gmail.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEDK/8cjrv0QCx3pRuAVoZKW5dsGcMUlCoCNahbiXgCQyWWaHmXSp7cGMCl0YS7DMdw=="
+  },
+  {
+    "Id": "d957ad49-eedf-48ad-86dd-fdfb22087c36",
+    "FirstName": "admin",
+    "LastName": "admin",
+    "Email": "admin2@gmail.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEH2c0kx\u002BSohHZ/buQADmSbaN5ndfcWF5dJUG2/tQWTJs4P4yZKYgGQZI7T0tEDp4Nw=="
+  },
+  {
+    "Id": "946fcbbb-4492-41e4-b457-dfcaa43bcd8a",
+    "FirstName": "Marko",
+    "LastName": "Marko",
+    "Email": "novikupac@test.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEISrUotT1g25bEPuqJdOxvCvL/LPGeNjQRiyhNyyfF8noHPtOSfDWvc2Z6ojHNfVQA=="
   }
 ]

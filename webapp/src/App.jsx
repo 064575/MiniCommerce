@@ -57,6 +57,27 @@ function App() {
     }, [])
 
     async function register() {
+
+        if (!registerFirstName.trim()) {
+            alert("Ime je obavezno.");
+            return;
+        }
+
+        if (!registerLastName.trim()) {
+            alert("Prezime je obavezno.");
+            return;
+        }
+
+        if (!registerEmail.trim()) {
+            alert("Email je obavezan.");
+            return;
+        }
+
+        if (registerPassword.length < 8) {
+            alert("Lozinka mora imati najmanje 8 karaktera.");
+            return;
+        }
+
         try {
             const response = await fetch(`${API_BASE_URL}/api/users`, {
                 method: 'POST',
@@ -72,6 +93,10 @@ function App() {
             })
 
             if (!response.ok) {
+                if (response.status === 409) {
+                    throw new Error('Korisnik sa ovom email adresom već postoji.')
+                }
+
                 throw new Error('Registracija nije uspela.')
             }
 
