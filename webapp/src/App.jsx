@@ -20,6 +20,7 @@ function App() {
     const [currentUser, setCurrentUser] = useState(null)
     const [loginEmail, setLoginEmail] = useState('')
     const [loginPassword, setLoginPassword] = useState('')
+    const [showLoginPassword, setShowLoginPassword] = useState(false)
 
     const [orders, setOrders] = useState([])
     const [ordersLoading, setOrdersLoading] = useState(false)
@@ -33,7 +34,10 @@ function App() {
     const [registerLastName, setRegisterLastName] = useState('')
     const [registerEmail, setRegisterEmail] = useState('')
     const [registerPassword, setRegisterPassword] = useState('')
+    const [registerConfirmPassword, setRegisterConfirmPassword] = useState('')
+    const [showRegisterPassword, setShowRegisterPassword] = useState(false)
     const [showRegister, setShowRegister] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     useEffect(() => {
         async function loadProducts() {
@@ -78,6 +82,11 @@ function App() {
             return;
         }
 
+        if (registerPassword !== registerConfirmPassword) {
+            alert("Lozinke se ne poklapaju.");
+            return;
+        }
+
         try {
             const response = await fetch(`${API_BASE_URL}/api/users`, {
                 method: 'POST',
@@ -109,6 +118,7 @@ function App() {
             setRegisterLastName('')
             setRegisterEmail('')
             setRegisterPassword('')
+            setRegisterConfirmPassword('')
             setShowRegister(false)
 
         } catch (err) {
@@ -427,28 +437,61 @@ function App() {
 
                                 <div>
                                     <label htmlFor="register-password">Lozinka:</label>
-                                    <input
-                                        id="register-password"
-                                        type="password"
-                                        value={registerPassword}
-                                        onChange={(event) =>
-                                            setRegisterPassword(event.target.value)
-                                        }
-                                        required
-                                    />
-                                </div>
+                                        <input
+                                            id="register-password"
+                                            type={showRegisterPassword ? "text" : "password"}
+                                            value={registerPassword}
+                                            onChange={(event) =>
+                                                setRegisterPassword(event.target.value)
+                                            }
+                                            required
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                                        >
+                                            {showRegisterPassword ? "Sakrij" : "Prikaži"}
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="register-confirm-password">
+                                            Potvrdi lozinku:
+                                        </label>
+                                        <input
+                                            id="register-confirm-password"
+                                            type={showConfirmPassword ? "text" : "password"}
+                                            value={registerConfirmPassword}
+                                            onChange={(event) =>
+                                                setRegisterConfirmPassword(event.target.value)
+                                            }
+                                            required
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                        >
+                                            {showConfirmPassword ? "Sakrij" : "Prikaži"}
+                                        </button>
+                                    </div>
 
                                 <button type="submit">
                                     Registruj se
                                 </button>
                             </form>
 
-                            <button
-                                type="button"
-                                onClick={() => setShowRegister(false)}
-                            >
-                                Nazad na prijavu
-                            </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setShowRegister(false)
+                                        setShowRegisterPassword(false)
+                                        setShowConfirmPassword(false)
+                                    }}
+                                >
+                                    Nazad na prijavu
+                                </button>
                         </div>
                     ) : (
                         <div>
@@ -473,15 +516,22 @@ function App() {
 
                                 <div>
                                     <label htmlFor="login-password">Lozinka:</label>
-                                    <input
-                                        id="login-password"
-                                        type="password"
-                                        value={loginPassword}
-                                        onChange={(event) =>
-                                            setLoginPassword(event.target.value)
-                                        }
-                                        required
-                                    />
+                                            <input
+                                                id="login-password"
+                                                type={showLoginPassword ? "text" : "password"}
+                                                value={loginPassword}
+                                                onChange={(event) =>
+                                                    setLoginPassword(event.target.value)
+                                                }
+                                                required
+                                            />
+
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowLoginPassword(!showLoginPassword)}
+                                            >
+                                                {showLoginPassword ? "Sakrij" : "Prikaži"}
+                                            </button>
                                 </div>
 
                                 <button type="submit">
@@ -489,12 +539,15 @@ function App() {
                                 </button>
                             </form>
 
-                            <button
-                                type="button"
-                                onClick={() => setShowRegister(true)}
-                            >
-                                Napravi nalog
-                            </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowRegister(true)
+                                            setShowLoginPassword(false)
+                                        }}
+                                    >
+                                        Napravi nalog
+                                    </button>
                         </div>
                     )}
                 </div>

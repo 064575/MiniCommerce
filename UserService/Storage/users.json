@@ -26,5 +26,12 @@
     "LastName": "Marko",
     "Email": "novikupac@test.com",
     "PasswordHash": "AQAAAAIAAYagAAAAEISrUotT1g25bEPuqJdOxvCvL/LPGeNjQRiyhNyyfF8noHPtOSfDWvc2Z6ojHNfVQA=="
+  },
+  {
+    "Id": "282f7217-8c62-409c-a73c-07859fc3485c",
+    "FirstName": "Marko",
+    "LastName": "Markovi\u0107",
+    "Email": "test@example.com",
+    "PasswordHash": "AQAAAAIAAYagAAAAEMgSJxzbZ8Km8bTHFrK6jfxilRQ4HdiPq1M38pdy0VTHVKN6ru5hgjJz5FtfDM45Xg=="
   }
 ]
